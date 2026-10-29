@@ -1,0 +1,79 @@
+@import "@fontsource-variable/outfit";
+@import "tailwindcss";
+@import "lenis/dist/lenis.css";
+
+/* VerdantOS design tokens — adapted from the Orion reference: near-black canvas,
+   charcoal rounded cards, electric-lime accent, pill chips. Blacks are tinted forest green. */
+@theme {
+  --font-sans: "Outfit Variable", ui-sans-serif, system-ui, sans-serif;
+
+  --color-canvas: #0a0e0c;
+  --color-panel: #0f1512;
+  --color-card: #151c18;
+  --color-card-2: #1c2520;
+  --color-chip: #26312b;
+  --color-line: #27322c;
+  --color-ink: #eef3ef;
+  --color-mute: #8c9a92;
+  --color-dim: #5f6c65;
+
+  --color-lime: #c6f432;
+  --color-lime-ink: #10200a;
+  --color-forest: #244b3b;
+  --color-forest-hi: #2f6650;
+  --color-sage: #a8d5b5;
+
+  --color-warn: #e3a63b;
+  --color-crit: #ef6a5f;
+  --color-ok: #4fb37f;
+  --color-info: #6fb3d9;
+
+  --radius-card: 1.5rem;
+}
+
+/* Theme tokens. Dark is the default (declared in @theme above). `[data-theme='dark']` re-declares it so a
+   subtree (the Overview hero) can stay dark while the page is light; `:root[data-theme='light']` is the light palette. */
+:root, [data-theme='dark'] {
+  --color-canvas: #0a0e0c; --color-panel: #0f1512; --color-card: #151c18; --color-card-2: #1c2520; --color-chip: #26312b;
+  --color-line: #27322c; --color-ink: #eef3ef; --color-mute: #8c9a92; --color-dim: #5f6c65;
+  --color-lime: #c6f432; --color-lime-ink: #10200a; --color-forest: #244b3b; --color-forest-hi: #2f6650; --color-sage: #a8d5b5;
+  --color-warn: #e3a63b; --color-crit: #ef6a5f; --color-ok: #4fb37f; --color-info: #6fb3d9;
+  --chart-1: #c6f432; --chart-2: #6fb3d9; --chart-3: #e3a63b; --chart-4: #a8d5b5; --chart-5: #b78ae8; --chart-6: #ef6a5f;
+  --glow-1: rgb(47 102 80 / 0.42); --glow-2: rgb(36 75 59 / 0.28);
+  color-scheme: dark;
+}
+:root[data-theme='light'] {
+  --color-canvas: #f6f8f5; --color-panel: #ffffff; --color-card: #ffffff; --color-card-2: #f1f5f2; --color-chip: #e6ece7;
+  --color-line: #e0e7e2; --color-ink: #1c2923; --color-mute: #607068; --color-dim: #8b9892;
+  --color-lime: #244b3b; --color-lime-ink: #ffffff; --color-forest: #244b3b; --color-forest-hi: #2f6650; --color-sage: #a8d5b5;
+  --color-warn: #a86a08; --color-crit: #c0392f; --color-ok: #2b7a4e; --color-info: #23749c;
+  --chart-1: #2f8f5b; --chart-2: #2b7aa6; --chart-3: #c48a1a; --chart-4: #6aa07c; --chart-5: #8a5bc4; --chart-6: #d0524a;
+  --glow-1: rgb(168 213 181 / 0.55); --glow-2: rgb(168 213 181 / 0.22);
+  color-scheme: light;
+}
+
+@layer base {
+  body {
+    margin: 0;
+    /* Soft forest-green glow in the middle of the canvas, fixed so it stays centred while scrolling. */
+    background:
+      radial-gradient(ellipse 55% 45% at 50% 42%, var(--glow-1), transparent 72%),
+      radial-gradient(ellipse 90% 70% at 50% 45%, var(--glow-2), transparent 80%),
+      var(--color-canvas);
+    background-attachment: fixed;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-weight: 300; letter-spacing: -0.01em; }
+  :focus-visible { outline: 2px solid var(--color-lime); outline-offset: 2px; border-radius: 0.5rem; }
+  ::selection { background: var(--color-lime); color: var(--color-lime-ink); }
+  * { scrollbar-width: thin; scrollbar-color: var(--color-chip) transparent; }
+  input, select, textarea, button { font: inherit; }
+  input[type="number"]::-webkit-inner-spin-button { opacity: 0.4; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

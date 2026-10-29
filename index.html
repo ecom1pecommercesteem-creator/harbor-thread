@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0e0c" />
+    <script>
+      // Apply the saved theme before first paint (avoids a dark→light flash). Default: dark.
+      try {
+        var p = (JSON.parse(localStorage.getItem('verdantos-v1') || '{}').state || {}).theme || 'dark'
+        document.documentElement.dataset.theme = p === 'system' ? (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark') : p
+      } catch (e) { document.documentElement.dataset.theme = 'dark' }
+    </script>
+    <title>VerdantOS — Vertical Farm Control Center (Demo)</title>
+    <style>
+      /* Boot loader: static HTML/CSS so it paints before any JS arrives. src/lib/boot.ts fades it out (.boot-done) and removes it. */
+      #boot { --b-bg: #0a0e0c; --b-glow: rgb(47 102 80 / 0.42); --b-ink: #eef3ef; --b-mute: #8c9a92; --b-accent: #c6f432; --b-accent-ink: #10200a; --b-track: #26312b;
+        position: fixed; inset: 0; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; color: var(--b-ink);
+        font-family: "Outfit Variable", ui-sans-serif, system-ui, sans-serif;
+        background: radial-gradient(ellipse 55% 45% at 50% 45%, var(--b-glow), transparent 72%), var(--b-bg); transition: opacity 0.6s ease, visibility 0.6s; }
+      html[data-theme='light'] #boot { --b-bg: #f6f8f5; --b-glow: rgb(168 213 181 / 0.55); --b-ink: #1c2923; --b-mute: #607068; --b-accent: #244b3b; --b-accent-ink: #fff; --b-track: #e0e7e2; }
+      html:has(#boot:not(.boot-done)) { overflow: hidden; }
+      #boot.boot-done { opacity: 0; visibility: hidden; pointer-events: none; }
+      #boot .b-mark { position: relative; width: 124px; height: 124px; display: grid; place-items: center; transition: transform 0.6s ease; }
+      #boot.boot-done .b-mark { transform: scale(1.12); }
+      #boot .b-ring { position: absolute; inset: 0; width: 100%; height: 100%; }
+      #boot .b-arc { transform-origin: 62px 62px; animation: b-spin 1.5s linear infinite; }
+      #boot .b-halo { position: absolute; inset: 14px; border-radius: 50%; border: 1px solid var(--b-accent); opacity: 0; animation: b-ping 2s ease-out infinite; }
+      #boot .b-tile { position: relative; width: 68px; height: 68px; border-radius: 22px; display: grid; place-items: center; background: var(--b-accent); color: var(--b-accent-ink); animation: b-pop 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+      #boot .b-tile path { stroke-dasharray: 1; animation: b-draw 1.1s 0.2s cubic-bezier(0.4, 0, 0.2, 1) both; }
+      #boot .b-word { font-size: 32px; font-weight: 300; letter-spacing: -0.01em; animation: b-rise 0.7s 0.15s ease-out both; }
+      #boot .b-word span { color: var(--b-accent); }
+      #boot .b-tag { margin-top: -18px; font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--b-mute); animation: b-rise 0.7s 0.3s ease-out both; }
+      #boot .b-bar { width: 168px; height: 2px; border-radius: 2px; background: var(--b-track); overflow: hidden; animation: b-rise 0.7s 0.4s ease-out both; }
+      #boot .b-fill { height: 100%; background: var(--b-accent); transform-origin: left; animation: b-fill 2.6s 0.4s cubic-bezier(0.1, 0.7, 0.2, 1) both; }
+      @keyframes b-spin { to { transform: rotate(360deg); } }
+      @keyframes b-ping { 0% { transform: scale(0.8); opacity: 0.5; } 100% { transform: scale(1.35); opacity: 0; } }
+      @keyframes b-pop { from { transform: scale(0.6); opacity: 0; } }
+      @keyframes b-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+      @keyframes b-rise { from { transform: translateY(10px); opacity: 0; } }
+      @keyframes b-fill { from { transform: scaleX(0); } to { transform: scaleX(0.92); } }
+      @media (prefers-reduced-motion: reduce) { #boot, #boot * { animation: none !important; transition-duration: 0.01s !important; } #boot .b-arc { stroke-dasharray: none; } }
+    </style>
+  </head>
+  <body>
+    <div id="boot" role="status" aria-label="Loading VerdantOS">
+      <div class="b-mark">
+        <svg class="b-ring" viewBox="0 0 124 124" aria-hidden="true" fill="none" stroke-width="2" stroke-linecap="round">
+          <circle cx="62" cy="62" r="56" stroke="var(--b-track)" />
+          <circle class="b-arc" cx="62" cy="62" r="56" stroke="var(--b-accent)" stroke-dasharray="90 262" />
+        </svg>
+        <span class="b-halo"></span>
+        <div class="b-tile">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path pathLength="1" d="M14 9.536V7a4 4 0 0 1 4-4h1.5a.5.5 0 0 1 .5.5V5a4 4 0 0 1-4 4 4 4 0 0 0-4 4c0 2 1 3 1 5a5 5 0 0 1-1 3" />
+            <path pathLength="1" d="M4 9a5 5 0 0 1 8 4 5 5 0 0 1-8-4" />
+            <path pathLength="1" d="M5 21h14" />
+          </svg>
+        </div>
+      </div>
+      <div class="b-word">Verdant<span>OS</span></div>
+      <div class="b-tag">Vertical Farm Control Center</div>
+      <div class="b-bar" aria-hidden="true"><div class="b-fill"></div></div>
+    </div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
